@@ -11,7 +11,7 @@ int main (){
     cout<<image.height<<endl;
 
 
-
+cout << "hi";
 
 
     return 0;
