@@ -13,32 +13,16 @@ int main()
     cout << "2 - Lighten" << endl;
     cin >> type;
 
-    if (type != 1 && type != 2)
-    {
-        cout << "Invalid choice!" << endl;
-        return 0;
-    }
-
     cout << "Enter percentage (0-100): ";
     cin >> percent;
 
-    if (percent < 0)
-    {
-        percent = 0;
-    }
-
-    if (percent > 100)
-    {
-        percent = 100;
-    }
-
     double p = percent / 100.0;
 
-    for (int i = 0; i < image.width; ++i)
+    for (int i = 0; i < image.width; i++)
     {
-        for (int j = 0; j < image.height; ++j)
+        for (int j = 0; j < image.height; j++)
         {
-            for (int k = 0; k < image.channels; ++k)
+            for (int k = 0; k < image.channels; k++)
             {
                 if (type == 1)
                 {
@@ -56,7 +40,14 @@ int main()
         }
     }
 
-    image.saveImage("output_image.jpg");
+    if (image.saveImage("output_image.png"))
+    {
+        cout << "Image saved successfully!" << endl;
+    }
+    else
+    {
+        cout << "Failed to save image!" << endl;
+    }
 
     return 0;
 }
