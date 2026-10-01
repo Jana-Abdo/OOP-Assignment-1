@@ -1,4 +1,5 @@
 #ifndef MENNA_H
 #define MENNA_H
-void grayscale(Image& image);
+#include "Image_Class.h"
+void flipImage(Image& image);
 #endif
