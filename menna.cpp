@@ -1,44 +1,58 @@
-#include "Image_Class.h"
-# include "menna.h"
+#include "menna.h"
 using namespace std;
-void flipImage(Image& image )
-{
-    int flip;
-    cout << "Enter 1 for horizontal flip or 2 for vertical flip: ";
-    cin >> flip;
-    while (flip != 1 && flip != 2) {
-        cout << "Invalid input. Please enter 1 or 2 : ";
-        cin >> flip;
-    }
-
-
-Image copy = image;
-if (flip == 1){
-cout << "Horizontal flip" << endl;
-      for (int i = 0; i < image.width; ++i)
-
-{
-      for (int j = 0; j < image.height; ++j)
-    {
-        for (int k = 0; k < 3; ++k)
-        {
-            image(i, j, k) = copy(image.width - 1 - i, j, k);
-        }
-    }
-}
-}
-else if (flip == 2)   
-{
-    cout << "Vertical flip" << endl;
-    for (int i = 0; i < image.width; ++i)
-    {
-        for (int j = 0; j < image.height; ++j)
-        {
-            for (int k = 0; k < 3; ++k)
-            {
-                image(i, j, k) = copy(i, image.height - 1 - j, k);
+void resizeImage(Image image, int newWidth, int newHeight , Image& result){
+    for (int i = 0 ; i < newWidth; ++i){
+        for (int j = 0 ; j < newHeight; ++j){
+            int oldI = i * image.width / newWidth;
+            int oldJ = j * image.height / newHeight;
+            for (int k = 0; k < image.channels; ++k) {
+                result(i, j, k) = image(oldI, oldJ, k);
             }
         }
     }
 }
-}
+void mergeImages (Image image1, Image image2){
+    int newWidth;
+    int newHeight;
+    if (image1.width == image2.width && image1.height == image2.height){
+        newWidth = image1.width;
+        newHeight = image1.height;
+    }
+    else{
+        int choice;
+        cout << "The images have different dimensions" << endl;
+        cout << "1. resize the first image to match the second image" << endl;
+        cout << "2. resize the second image to match the first image" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+        if (choice == 1){
+            newWidth = image2.width;
+            newHeight = image2.height;}
+            else  if (choice == 2){
+                newWidth = image1.width;
+                newHeight = image1.height;
+            }
+            else{
+                cout << "Invalid choice." << endl;
+                return;
+            }
+        }
+                
+        
+    
+        Image resizedImage1(newWidth, newHeight);
+        Image resizedImage2(newWidth, newHeight);
+        resizeImage(image1, newWidth, newHeight, resizedImage1);
+        resizeImage(image2, newWidth, newHeight, resizedImage2); 
+        Image result(newWidth, newHeight);
+        for (int i = 0 ; i < newWidth; ++i){
+            for (int j = 0 ; j < newHeight; ++j){
+                for (int k = 0; k < image1.channels; ++k) {
+                    int pixel1 = resizedImage1(i, j, k);
+                    int pixel2 = resizedImage2(i, j, k);
+                    result(i, j, k) = (pixel1 + pixel2) / 2;
+                }
+            }   
+        }
+        result.saveImage("merge.jpg");
+    }
