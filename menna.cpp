@@ -5,7 +5,7 @@ void resizeImage(Image image, int newWidth, int newHeight , Image& result){
         for (int j = 0 ; j < newHeight; ++j){
             int oldI = i * image.width / newWidth;
             int oldJ = j * image.height / newHeight;
-            for (int k = 0; k < image.channels; ++k) {
+            for (int k = 0; k < 3; ++k) {
                 result(i, j, k) = image(oldI, oldJ, k);
             }
         }
@@ -47,7 +47,7 @@ void mergeImages (Image image1, Image image2){
         Image result(newWidth, newHeight);
         for (int i = 0 ; i < newWidth; ++i){
             for (int j = 0 ; j < newHeight; ++j){
-                for (int k = 0; k < image1.channels; ++k) {
+                for (int k = 0; k < 3; ++k) {
                     int pixel1 = resizedImage1(i, j, k);
                     int pixel2 = resizedImage2(i, j, k);
                     result(i, j, k) = (pixel1 + pixel2) / 2;
