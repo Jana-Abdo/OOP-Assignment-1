@@ -1,58 +1,35 @@
 #include "menna.h"
-using namespace std;
-void resizeImage(Image image, int newWidth, int newHeight , Image& result){
-    for (int i = 0 ; i < newWidth; ++i){
-        for (int j = 0 ; j < newHeight; ++j){
-            int oldI = i * image.width / newWidth;
-            int oldJ = j * image.height / newHeight;
-            for (int k = 0; k < 3; ++k) {
-                result(i, j, k) = image(oldI, oldJ, k);
-            }
-        }
-    }
-}
-void mergeImages (Image image1, Image image2){
-    int newWidth;
-    int newHeight;
-    if (image1.width == image2.width && image1.height == image2.height){
-        newWidth = image1.width;
-        newHeight = image1.height;
-    }
-    else{
-        int choice;
-        cout << "The images have different dimensions" << endl;
-        cout << "1. resize the first image to match the second image" << endl;
-        cout << "2. resize the second image to match the first image" << endl;
-        cout << "Enter your choice: ";
-        cin >> choice;
-        if (choice == 1){
-            newWidth = image2.width;
-            newHeight = image2.height;}
-            else  if (choice == 2){
-                newWidth = image1.width;
-                newHeight = image1.height;
-            }
-            else{
-                cout << "Invalid choice." << endl;
-                return;
-            }
-        }
-                
+void sunlight_brightness(Image& image)
+{
+    for (int i = 0; i < image.width ;++i)
+{ 
+     for (int j = 0; j < image.height ;++j)
+    {
+        int red = image(i , j , 0);
+        int green = image(i , j , 1);
         
-    
-        Image resizedImage1(newWidth, newHeight);
-        Image resizedImage2(newWidth, newHeight);
-        resizeImage(image1, newWidth, newHeight, resizedImage1);
-        resizeImage(image2, newWidth, newHeight, resizedImage2); 
-        Image result(newWidth, newHeight);
-        for (int i = 0 ; i < newWidth; ++i){
-            for (int j = 0 ; j < newHeight; ++j){
-                for (int k = 0; k < 3; ++k) {
-                    int pixel1 = resizedImage1(i, j, k);
-                    int pixel2 = resizedImage2(i, j, k);
-                    result(i, j, k) = (pixel1 + pixel2) / 2;
-                }
-            }   
+        red = red + 60;
+        green = green + 40;   
+
+        if (red > 255) {
+            red = 255;
         }
-        result.saveImage("merge.jpg");
+        if (green > 255) {
+            green = 255;
+        }
+    
+        
+        image(i , j , 0) = red;
+        image(i , j , 1) = green;
     }
+    
+    }
+
+
+
+
+
+
+
+} 
+

@@ -1,10 +1,10 @@
-#include "menna.h"
 #include "menna.cpp"
+
 using namespace std;
 int main() {
-    Image flower("flower.jpg");
-    Image bird("bird.jpg");
-
-    mergeImages(flower, bird  ); 
+    
+    Image bird("mena.jpg");
+    sunlight_brightness(bird); 
+    bird.saveImage("mena_sunlight.jpg");
     return 0;
 }
