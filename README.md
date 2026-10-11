@@ -15,7 +15,7 @@ BabyPhotoshop allows users to load, manipulate, and apply various creative filte
 - **Language:** C++
 - **IDEs & Tools:** Visual Studio Code (VS Code) / Visual Studio (VS) & Terminal
 - **Libraries Used:**
-  - `class_image.h`
+  - `Image_Class.h`
   - `stb_image.h`
   - `stb_image_write.h`
 
