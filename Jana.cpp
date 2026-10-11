@@ -25,15 +25,31 @@ void blackAndwhite(Image& m){
     }
 }
 /////*/////*/////*/////*/////*/////*/////*/////*
-
-void invert(Image& m) {
-    for(int i = 0; i < m.width; i++) {
-        for(int j = 0; j < m.height; j++) {
-          for(int k = 0; k < m.channels; k++) {
-            m(i,j,k) = 255 - m(i,j,k);
-          }
+ void rotateImage(Image& m, int angle) {
+    Image temp;
+    if (angle == 90 || angle == 270) {
+        temp = Image(m.height, m.width);
+    } 
+    else {
+        temp = Image(m.width, m.height);
+    }
+     for (int i = 0; i < temp.width; i++) {
+        for (int j = 0; j < temp.height; j++) {
+            for (int k = 0; k < m.channels; k++) {
+                if (angle == 90) {
+                    temp(i, j, k) = m(j, m.height - 1 - i, k);
+                }
+                else if (angle == 180) {
+                    temp(i, j, k) = m(m.width - 1 - i, m.height - 1 - j, k);
+                }
+                else if (angle == 270) {
+                    temp(i, j, k) = m(m.width - 1 - j, i, k);
+                }
+            }
         }
     }
+
+    m = temp;
 }
 /////*/////*/////*/////*/////*/////*/////*/////*
 void DetectEdge(Image& m) {
@@ -61,24 +77,16 @@ void DetectEdge(Image& m) {
     m = temp;
 }
 /////*/////*/////*/////*/////*/////*/////*/////*
-void SimpleBlur(Image& m) {
-    Image temp = m;
-    for(int i = 1; i < m.width - 1; i++) {
-        for(int j = 1; j < m.height  - 1; j++) {
-             for (int k = 0; k < m.channels; k++) {
-                int s = 0;
-                for(int x = -1; x <= 1; x++){
-                    for(int y = -1; y <= 1; y++){
-                        s += m(i + x, j + y, k);
-                     }
-                    }
-                    temp(i, j, k) = s / 9;
-                }
+void TV(Image& m) {
+    for (int i = 0; i < m.height; i++) {
+        if (i % 2 == 0) {
+            for (int j = 0; j < m.width; j++) {
+                m(j, i, 0) *= 0.5;
+                m(j, i, 1) *= 0.5;
+                m(j, i, 2) *= 0.5;
             }
         }
-
-        m = temp;
-
+    }
 }
 /////*/////*/////*/////*/////*/////*/////*/////*
 bool exists(string name) {
@@ -108,9 +116,9 @@ int main(){
     int choice;
     while(true){
     cout<<"For Black And White Filter---> 1\n";
-    cout<<"For Black Invert color Filter--->2\n";
+    cout<<"For Rotate Filter--->2\n";
     cout<<"For Dected Edges Filter--->3\n";
-    cout<<"For Simple Blur Filter--->4\n";
+    cout<<"For Tv filter--->4\n";
     cout<<"For load new image --->5\n";
     cout<<"For save image ---> 6\n";
     cout<<"To exit --->7\n";
@@ -120,7 +128,10 @@ int main(){
         changed = true;
     }
     else if (choice == 2) {
-        invert(m); 
+        int angle;
+        cout<<"Choose rotation angle (90, 180, 270): ";
+        cin>>angle;
+        rotateImage(m,angle);
         changed = true;
     }
      if(choice == 3) {
@@ -128,7 +139,7 @@ int main(){
         changed = true;
     }
      if(choice == 4) {
-        SimpleBlur(m); 
+        TV(m); 
         changed = true;
     }
     else if(choice == 5) {
