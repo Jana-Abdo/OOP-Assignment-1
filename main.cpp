@@ -1,10 +1,10 @@
-#include "menna.cpp"
+#include "grayscale.cpp"
 
 using namespace std;
 int main() {
     
-    Image bird("mena.jpg");
-    sunlight_brightness(bird); 
-    bird.saveImage("mena_sunlight.jpg");
+    Image image("mena.jpg");
+    grayscale(image);
+    image.saveImage("mena_grayscale.jpg");
     return 0;
 }
