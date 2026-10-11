@@ -1,18 +1,10 @@
-#include <iostream>
-#include "Image_Class.h"
+#include "menna.cpp"
 
 using namespace std;
-
-
-int main (){
+int main() {
     
-    Image image("flower.jpg");
-    cout<<image.width<<endl;
-    cout<<image.height<<endl;
-
-
-
-
-
+    Image bird("mena.jpg");
+    sunlight_brightness(bird); 
+    bird.saveImage("mena_sunlight.jpg");
     return 0;
 }
