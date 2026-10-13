@@ -1,56 +1,147 @@
-#include "menna.h"
-  #include <iostream>
-  #include <cmath>
-  using namespace std;
-  void skewImage(Image& image) 
-  {
-      double angle;
-      cout << "Enter the skew angle in degrees: ";
-      cin >> angle;
-      if (angle <= -89 || angle >= 89) 
-      {
-          cout << "Invalid angle." << endl;
-          return;
+
+# include "Image_Class.h"
+# include <iostream>
+using namespace std ;
+
+
+void image_resize (Image &image , int new_w, int new_h){
+
+    Image new_image (new_w, new_h);
+
+    for (int new_x=0; new_x < new_image.width ; ++new_x){
+
+      for (int new_y=0; new_y < new_image.height ; ++new_y){
+        
+        int old_x= new_x * image.width/new_image.width;
+
+        int old_y= new_y * image.height/new_image.height;
+
+
+        for(int color=0 ; color<3; ++color){
+          
+            new_image(new_x,new_y,color)=image(old_x,old_y, color);
+
+        }
+
       }
-      double radians = angle * 3.141592653589793/ 180.0;
-      double skew = tan(radians);
-int extraWidth = ceil((image.height -1 * abs(skew)));
-      int newWidth = image.width + extraWidth;
-      Image result(newWidth, image.height);
-      for (int j = 0; j < image.height; j++) 
-      {
-        for (int i = 0; i < newWidth; i++) 
-          {
-            result(i, j, 0) = 255; 
-            result(i, j, 1) = 255;     
-            result(i, j, 2) = 255;
-          }
-        }
-             for (int j = 0; j < image.height; j++)
-             
-        {  
-            int shift = round((image.height - 1 - j) * skew);   
-            if (angle < 0) 
-            {
-                shift = shift + extraWidth; 
-            }
-            for (int i = 0; i < image.width; i++) 
-            {
-                int newX = i + shift;
-                if (newX >= 0 && newX < newWidth) 
-                {
-                    for (int k = 0; k < 3; k++) 
-                    {
-                        result(newX, j, k) = image(i, j, k);
-                    }
-                }
-            }
-
-
-
-
-
-
-        }
-        image = result;
+           
     }
+
+      image=new_image;
+}
+
+
+
+void merge_images(Image &image1, Image &image2){
+
+    int width, height;
+    if (image1.width==image2.width && image1.height==image2.height){
+
+        width=image1.width; height=image1.height;
+    }
+
+    else{
+
+        int choice;
+
+        cout<<" the two_images have different sizes \n";
+        cout << "choose one of two options\n";
+        cout<< " choose 1  resize to the beggist size\n";
+        cout<<" choose 2  merge common_area\n";
+
+        cin>> choice;
+
+        if(choice==1){
+         
+            if(image1.width>image2.width){
+
+                width=image1.width;
+    
+            }
+
+            else{ width =image2.width;}
+
+            if(image1.height>image2.height){
+
+                height=image1.height;
+    
+            }
+
+            else{height=image2.height;}
+
+            image_resize(image1,width,height);
+            image_resize(image2,width,height);
+
+
+
+        }
+
+         else if  (choice==2){
+         
+            if(image1.width<image2.width){
+
+                width=image1.width;
+    
+            }
+
+            else{ width =image2.width;}
+
+            if(image1.height<image2.height){
+
+                height=image1.height;
+    
+            }
+             else{height=image2.height;}
+            
+
+    }
+
+    else{
+
+        cout<<"invalid choice";
+    }
+
+      
+
+    Image merged_photo(width,height);
+     for (int x =0 ; x < width;++x){
+
+        for (int y=0; y< height; ++y){
+
+            for(int color=0; color <3; ++color){
+
+                merged_photo(x,y,color)=(image1(x,y,color)+image2(x,y,color))/2;
+
+            
+            }
+        }
+     }
+
+     merged_photo.saveImage("merged photo.jpg");
+    }
+}
+
+
+int main(){
+
+
+    string name1, name2;
+    
+     cout<<"Enter first image name:";
+
+     cin>> name1;
+
+     cout<< "enter seconde image name:";
+
+     cin>> name2;
+
+     Image image1(name1);
+     Image image2(name2);
+
+     merge_images(image1, image2);
+
+     cout<<" the two images are successfully merged !!";
+        
+     return 0 ;
+
+}
