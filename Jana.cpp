@@ -117,7 +117,7 @@ int main(){
     while(true){
     cout<<"For Black And White Filter---> 1\n";
     cout<<"For Rotate Filter--->2\n";
-    cout<<"For Dected Edges Filter--->3\n";
+    cout<<"For Detcted Edges Filter--->3\n";
     cout<<"For Tv filter--->4\n";
     cout<<"For load new image --->5\n";
     cout<<"For save image ---> 6\n";
